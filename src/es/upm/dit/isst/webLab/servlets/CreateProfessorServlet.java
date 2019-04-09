@@ -29,7 +29,13 @@ public class CreateProfessorServlet extends HttpServlet {
 		
 		ProfessorDAO pdao = ProfessorDAOImplementation.getInstance();
 		pdao.create( professor );
-		
 		resp.sendRedirect( req.getContextPath() + "/AdminServlet" );
 	}
+	
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		ProfessorDAO pdao = ProfessorDAOImplementation.getInstance();
+		req.getSession().setAttribute("professor", pdao);
+		getServletContext().getRequestDispatcher("/AdminView.jsp").forward(req, resp);
+	}
+	
 }

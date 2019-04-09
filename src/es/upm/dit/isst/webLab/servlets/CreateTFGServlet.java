@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.crypto.hash.Sha256Hash;
 
+import es.upm.dit.isst.webLab.dao.ProfessorDAO;
+import es.upm.dit.isst.webLab.dao.ProfessorDAOImplementation;
 import es.upm.dit.isst.webLab.dao.TFGDAO;
 import es.upm.dit.isst.webLab.dao.TFGDAOImplementation;
 import es.upm.dit.isst.webLab.model.Professor;
@@ -26,21 +28,30 @@ public class CreateTFGServlet extends HttpServlet {
 		String password = req.getParameter( "password" );
 		String email = req.getParameter( "email" );
 		String title = req.getParameter( "title" );
-		int status = req.getParameter( "status" );
-		byte[] document = req.getParameter( "document" );
-		double grade = req.getParameter( "grade" );
-		Professor advisor = req.getParameter( "advisor" );
+		int status = 1;
+		Professor advisor = (Professor) req.getAttribute( "advisor" );
+	
+		/* byte[] document = (byte[]) req.getAttribute( "document" );
+		double grade = (double) req.getAttribute( "grade" );*/
 
 		TFG tfg = new TFG();
 		tfg.setName( name );
 		tfg.setEmail( email );
 		tfg.setTitle( title );
+		tfg.setStatus(status);
+		tfg.setAdvisor(advisor);
 		
-		professor.setPassword( new Sha256Hash( password ).toString() );
+		tfg.setPassword( new Sha256Hash( password ).toString() );
 		
-		TFGDAO pdao = TFGDAOImplementation.getInstance();
-		pdao.create( professor );
-		
+		TFGDAO tfgdao = TFGDAOImplementation.getInstance();
+		tfgdao.create( tfg );
 		resp.sendRedirect( req.getContextPath() + "/AdminServlet" );
 	}
+	
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		TFGDAO tfgdao = TFGDAOImplementation.getInstance();
+		req.getSession().setAttribute("tfg", tfgdao);
+		getServletContext().getRequestDispatcher("/AdminView.jsp").forward(req, resp);
+	}
+	
 }

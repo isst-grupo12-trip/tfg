@@ -34,6 +34,7 @@
 				<button type="submit">Crear profesor</button>
 			</p>
 		</form>
+		
 		<h3>Listado de profesores</h3>
 		<table border="1">
 			<tr>
@@ -49,6 +50,36 @@
 				</tr>
 			</c:forEach>
 		</table>
+		
+		<h3>Crear TFG nuevo</h3>
+		<form action="CreateTFGServlet" method="post">
+			<p>
+				Nombre: <input type="text" name="name" />
+			</p>
+			<p>
+				Email: <input type="text" name="email" />
+			</p>
+			<p>
+				Password: <input type="password" name="password" />
+			</p>
+			<p>
+				Título: <input type="text" name="title" />
+			</p>
+			<p>
+				Tutor: <select name="advisor">
+					<option value="" disabled selected>Elija un tutor</option>
+					<c:forEach items="${ professor_list }" var="professori">
+						<option value="${ professor.email }">
+							${ professori.name }-${ professori.email }
+						</option>
+					</c:forEach>
+				</select>
+			</p>
+			<p>
+				<button type="submit">Crear TFG</button>
+			</p>
+		</form>
+		
 		<h3>Listado de tfgs</h3>
 		<table border="1">
 			<tr>
@@ -83,7 +114,7 @@
 						</c:if></td>
 				</tr>
 			</c:forEach>
-		</table>
+		</table>		
 	</shiro:hasRole>
 </body>
 </html>
